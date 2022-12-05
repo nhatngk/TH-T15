@@ -34,7 +34,7 @@ const studentCtrl = {
                     masv
                 }
             });
-            if (isExisting) return res.status(409).json({ msg: "Id already exists " });
+            if (isExisting) return res.status(409).json({ msg: "Id already exist " });
             if (!hoten) return res.status(400).json({ msg: "Malformed request syntax" });
             await db.sinhvien.create({
                 masv,
@@ -81,7 +81,16 @@ const studentCtrl = {
                     masv: req.params.id
                 }
             });
-            if (!isExisting) return res.status(409).json({ msg: "Id does not exists "});
+            if (!isExisting) return res.status(409).json({ msg: "Id does not exist"});
+
+            const check = await db.sinhvien.findOne({
+                where: {
+                    masv
+                }
+            });
+
+            if (check) return res.status(409).json({ msg: "Updated id already exists"});
+
             await db.sinhvien.update(
                 {
                     masv, hoten, ngaysinh, gioitinh, quequan, malop
